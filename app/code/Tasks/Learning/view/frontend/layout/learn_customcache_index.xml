@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column"
+      xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <referenceBlock name="content">
+        <block
+                template="Tasks_Learning::customcache_index.phtml"
+                class="Tasks\Learning\Block\Cache\Main"
+                name="customcache_index"
+                cacheable="false"
+        />
+    </referenceBlock>
+</page>
