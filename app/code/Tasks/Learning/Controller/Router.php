@@ -59,8 +59,9 @@ class Router implements \Magento\Framework\App\RouterInterface
      */
     public function match(\Magento\Framework\App\RequestInterface $request)
     {
-        if (strripos($request->getUriString(), $request->getDistroBaseUrl() . 'learn') !== false) {
-            $pathToController = str_replace('-', '/', $request->getPathInfo());
+        if(preg_match('/' . addcslashes( $request->getDistroBaseUrl(), '/') . '([^-\/]*)-([^-]*)-([^-]*)/',$request->getUriString())===1){
+            $countReplace = 2;
+            $pathToController = str_replace('-', '/', $request->getPathInfo(), $countReplace);
             $this->_response->setRedirect('http://' . $request->getUri()->getHost() . $pathToController)->sendResponse();
             die();
         }

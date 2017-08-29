@@ -21,13 +21,12 @@
 namespace Tasks\Learning\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Data\Tree\Node;
 
 /**
  * Class TopMenuObserver
  * @package Tasks\Learning\Observer
  */
-class TopMenuObserver implements ObserverInterface
+class TopMenuObserverBeforeCollection implements ObserverInterface
 {
     /**
      * @var \Magento\Framework\UrlInterface
@@ -71,23 +70,19 @@ class TopMenuObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        $menu = $observer->getMenu();
-        $tree = $menu->getTree();
-        $data = [
-            'name' => __('About us'),
-            'id' => 'about-us-observer',
-            'url' => '/about-us/',
-        ];
-        $node = new Node($data, 'id', $tree, $menu);
-        $menu->prependChild($node);
-
-        $data = [
-            'name' => __('Contact us'),
-            'id' => 'contact-observer',
-            'url' => '/contact/',
-        ];
-        $node = new Node($data, 'id', $tree, $menu);
-        $menu->addChild($node);
+        $collectionObj = $observer->getCategoryCollection();
+        $object = $collectionObj->getNewEmptyItem()->setData([
+                "entity_id" => "9999",
+                "parent_id" => "2",
+                "request_path" => "learn/index/index",
+                "name" => "SUPER MENU"
+        ]);
+        $collectionObj->addItem($object);
+//        if (isset($collectionObj->_itemsById[$object->getId()])) {
+//            $collectionObj->_itemsById[$object->getId()][] = $object;
+//        } else {
+//            $collectionObj->_itemsById[$object->getId()] = [$object];
+//        }
     }
 
 }

@@ -23,7 +23,7 @@
     <event name="page_block_html_topmenu_gethtml_before">
         <observer name="observermenu" instance="Tasks\Learning\Observer\TopMenuObserver"/>
     </event>
-    <event name="page_block_html_topmenu_gethtml_after">
-        <observer name="observermenu" instance="Tasks\Learning\Observer\TopMenuObserver"/>
+    <event name="catalog_category_collection_load_before">
+        <observer name="observermenubeforecollection" instance="Tasks\Learning\Observer\TopMenuObserverBeforeCollection"/>
     </event>
 </config>
