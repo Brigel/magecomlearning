@@ -1,0 +1,8 @@
+.idea/
+var/
+pub/static/
+pub/media/
+app/etc/config.php
+app/etc/env.php
+
+
