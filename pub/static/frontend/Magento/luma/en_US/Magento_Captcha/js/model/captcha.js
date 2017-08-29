@@ -1,1 +1,0 @@
-/var/www/magento2/learning/vendor/magento/module-captcha/view/frontend/web/js/model/captcha.js

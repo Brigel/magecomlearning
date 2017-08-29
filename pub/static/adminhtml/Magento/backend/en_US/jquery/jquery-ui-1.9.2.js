@@ -1,1 +1,0 @@
-/var/www/magento2/learning/lib/web/jquery/jquery-ui-1.9.2.js
