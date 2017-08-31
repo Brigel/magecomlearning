@@ -90,6 +90,6 @@ class Index extends \Magento\Backend\App\Action
         $resultPage->setActiveMenu('Tasks_Learning::magecomitem');
         $resultPage->getConfig()->getTitle()->prepend((__('Items')));
         \Magento\Framework\Profiler::stop('grid_page_load');
-        return $resultPage;
+        return $this;
     }
 }
