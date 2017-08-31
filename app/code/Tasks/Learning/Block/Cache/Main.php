@@ -50,17 +50,29 @@ class Main extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get cached content or sample content if not cached
+     * @return bool|string
      */
-    public function getCachedContent()
+    protected function _toHtml()
     {
-        $pageContentFromCache = $this->customCache->load('page_content');
-        if(!empty($pageContentFromCache)){
-            echo $pageContentFromCache;
-        }else{
-            echo 'Not cached content and add to cache new content! ';
-            $this->customCache->save('<h2>CACHED CONTENT!!!<h2/>','page_content');
+        $html = $this->customCache->load('test_cache_page');
+        if(empty($html))
+        {
+            $html = parent::_toHtml();
+            $this->customCache->save($html,'test_cache_page');
         }
+        return $html;
+    }
+
+    /**
+     * Print string
+     *
+     * @return void
+     */
+    public function printData()
+    {
+        echo "<pre>";
+        print_r('qweqewqewqew');
+        echo "</pre>";
     }
 
 }

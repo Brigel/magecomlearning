@@ -27,6 +27,18 @@
             <parameter name="testparam" xsi:type="text" required="true" visible="true" sort_order="10">
                 <label translate="true">Test param name</label>
             </parameter>
+            <parameter name="display_type" xsi:type="select" required="true" visible="true">
+                <label translate="true">Display Type</label>
+                <description translate="true">TEST PARAM 2</description>
+                <options>
+                    <option name="default" value="all_products" selected="true">
+                        <label translate="true">Select 1</label>
+                    </option>
+                    <option name="item" value="new_products">
+                        <label translate="true">Select 2</label>
+                    </option>
+                </options>
+            </parameter>
         </parameters>
     </widget>
 </widgets>

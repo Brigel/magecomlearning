@@ -25,7 +25,7 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
-    protected $pageFactory;
+    protected $_resultPageFactory;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -43,7 +43,7 @@ class Index extends \Magento\Framework\App\Action\Action
         \Magento\Framework\View\Result\PageFactory $pageFactory,
         \Psr\Log\LoggerInterface $logger
     ) {
-        $this->pageFactory = $pageFactory;
+        $this->_resultPageFactory = $pageFactory;
         $this->logger = $logger;
         return parent::__construct($context);
     }
@@ -64,8 +64,7 @@ class Index extends \Magento\Framework\App\Action\Action
         $this->logger->addError("LOG ERROR: $message"); // log location: var/log/exception.log
         $this->logger->critical(new \Exception("LOG EXCEPTION CRITICAL: $message")); // log location: var/log/exception.log
 
-        $this->_view->loadLayout();
-
-        $this->_view->renderLayout();
+        $resultPage = $this->_resultPageFactory->create();
+        return $resultPage;
     }
 }
