@@ -30,28 +30,40 @@ use Magento\Framework\View\Result\PageFactory;
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
+     * @var
+     */
+    protected $customCache;
+
+    /**
      * @var PageFactory
      */
-    protected $pageFactory;
+    protected $_resultPageFactory;
+
+    /**
+     * @var \Magento\Framework\App\Request\Http
+     */
+    protected $_http;
 
     /**
      * Index constructor.
      * @param Context $context
      * @param PageFactory $pageFactory
      */
-    public function __construct(Context $context, PageFactory $pageFactory)
-    {
-        $this->pageFactory = $pageFactory;
+    public function __construct(
+        Context $context,
+        PageFactory $pageFactory
+    ) {
+        $this->_resultPageFactory = $pageFactory;
         return parent::__construct($context);
     }
 
     /**
-     * @return void
+     * @return PageFactory $pageFactory
      */
     public function execute()
     {
-        $this->_view->loadLayout();
-
-        $this->_view->renderLayout();
+        $resultPage = $this->_resultPageFactory->create(false);
+        return $resultPage;
     }
+
 }

@@ -31,4 +31,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="productNameLowPrice" type="Tasks\Learning\Plugin\ProductPlugin" sortOrder="1"/>
+    </type>
 </config>

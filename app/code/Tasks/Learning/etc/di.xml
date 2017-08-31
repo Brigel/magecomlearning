@@ -36,9 +36,7 @@
     <virtualType name="TasksLearningMagecomItemGridDataProvider"
                  type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>
-            <argument name="collection" xsi:type="object" shared="false">
-                Tasks\Learning\Model\ResourceModel\MagecomItem\Collection
-            </argument>
+            <argument name="collection" xsi:type="object" shared="false">Tasks\Learning\Model\ResourceModel\MagecomItem\Collection</argument>
             <argument name="filterPool" xsi:type="object" shared="false">TasksLearningGirdFilterPool</argument>
         </arguments>
     </virtualType>
@@ -53,9 +51,7 @@
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="tasks_learning_magecomitem_listing_data_source" xsi:type="string">
-                    Tasks\Learning\Model\ResourceModel\MagecomItem\Grid\Collection
-                </item>
+                <item name="tasks_learning_magecomitem_listing_data_source" xsi:type="string">Tasks\Learning\Model\ResourceModel\MagecomItem\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
@@ -65,8 +61,6 @@
     <preference
             for="\Magento\Framework\Data\Tree\Node"
             type="Tasks\Learning\Model\Node"/>
-    <type name="Magento\Catalog\Model\Product">
-        <plugin name="productNameLowPrice" type="Tasks\Learning\Plugin\ProductPlugin" sortOrder="1"/>
-    </type>
+
 
 </config>
