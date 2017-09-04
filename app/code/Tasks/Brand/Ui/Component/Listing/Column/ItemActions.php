@@ -76,8 +76,8 @@ class ItemActions extends \Magento\Ui\Component\Listing\Columns\Column
      */
     public function prepareDataSource(array $dataSource)
     {
-        if (isset($dataSource['data']['beand_entity'])) {
-            foreach ($dataSource['data']['beand_entity'] as & $item) {
+        if (isset($dataSource['data']['items'])) {
+            foreach ($dataSource['data']['items'] as & $item) {
                 if (isset($item['entity_id'])) {
                     $item[$this->getData('name')] = [
                         'edit' => [
