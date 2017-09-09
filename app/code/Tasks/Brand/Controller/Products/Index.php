@@ -29,6 +29,11 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class Index extends \Magento\Catalog\Controller\Category\View
 {
     /**
+     * @var \Tasks\Brand\Helper\Data
+     */
+    protected $_brandConfig;
+
+    /**
      * @var \Tasks\Brand\Model\ResourceModel\Brand\CollectionFactory
      */
     protected $_brandCollection;
@@ -44,9 +49,11 @@ class Index extends \Magento\Catalog\Controller\Category\View
         \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
         Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
-        \Tasks\Brand\Model\ResourceModel\Brand\Collection $_brandCollection
+        \Tasks\Brand\Model\ResourceModel\Brand\Collection $_brandCollection,
+        \Tasks\Brand\Helper\Data $brandConfig
     ) {
         $this->_brandCollection = $_brandCollection;
+        $this->_brandConfig = $brandConfig;
         parent::__construct($context, $catalogDesign, $catalogSession, $coreRegistry, $storeManager, $categoryUrlPathGenerator, $resultPageFactory, $resultForwardFactory, $layerResolver, $categoryRepository);
     }
 
@@ -81,8 +88,24 @@ class Index extends \Magento\Catalog\Controller\Category\View
             $this->
             _brandCollection
                 ->addAttributeToSelect('name')
+                ->addAttributeToSelect('meta_title')
+                ->addAttributeToSelect('meta_description')
+                ->addAttributeToSelect('meta_keywords')
                 ->addFieldToFilter('entity_id', ['eq' => $brandId])
                 ->getFirstItem();
+
+        $meta_title = $brand->getData('meta_title')? $brand->getData('meta_title')
+            :$this->_brandConfig->getGeneralConfig('meta_title');
+
+        $meta_description = $brand->getData('meta_description')? $brand->getData('meta_description')
+            :$this->_brandConfig->getGeneralConfig('meta_description');
+
+        $meta_keywords = $brand->getData('meta_keywords')? $brand->getData('meta_keywords')
+            :$this->_brandConfig->getGeneralConfig('meta_keywords');
+
+        $page->getConfig()->getTitle()->set($meta_title);
+        $page->getConfig()->setDescription($meta_description);
+        $page->getConfig()->setKeywords($meta_keywords);
         $this->_view->getLayout()->getBlock('page.main.title')->setPageTitle($brand->getName());
         return $page;
 

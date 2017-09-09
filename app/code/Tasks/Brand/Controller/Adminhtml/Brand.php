@@ -77,6 +77,7 @@ abstract class Brand extends \Magento\Backend\App\Action
         $brandId = (int)$this->getRequest()->getParam('entity_id');
         /** @var \Tasks\Brand\Model\Brand $brand */
         $brand = $this->_brandFactory->create();
+        $brand->getCollection()->addAttributeToSelect('*');
         if ($brandId) {
             $brand->load($brandId);
         }

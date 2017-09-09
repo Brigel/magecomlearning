@@ -24,7 +24,7 @@ namespace Tasks\Brand\Block\Adminhtml\Brand\Edit\Tab;
  * Class Brand
  * @package Tasks\Brand\Block\Adminhtml\Brand\Edit\Tab
  */
-class Brand extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class BrandMeta extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Wysiwyg config
@@ -32,6 +32,13 @@ class Brand extends \Magento\Backend\Block\Widget\Form\Generic implements \Magen
      * @var \Magento\Cms\Model\Wysiwyg\Config
      */
     protected $_wysiwygConfig;
+
+    /**
+     * Country options
+     *
+     * @var \Magento\Config\Model\Config\Source\Locale\Country
+     */
+    protected $_countryOptions;
 
     /**
      * Country options
@@ -44,6 +51,7 @@ class Brand extends \Magento\Backend\Block\Widget\Form\Generic implements \Magen
      * constructor
      *
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
+     * @param \Magento\Config\Model\Config\Source\Locale\Country $countryOptions
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -52,6 +60,7 @@ class Brand extends \Magento\Backend\Block\Widget\Form\Generic implements \Magen
      */
     public function __construct(
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
+        \Magento\Config\Model\Config\Source\Locale\Country $countryOptions,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
@@ -59,6 +68,7 @@ class Brand extends \Magento\Backend\Block\Widget\Form\Generic implements \Magen
         array $data = []
     ) {
         $this->_wysiwygConfig = $wysiwygConfig;
+        $this->_countryOptions = $countryOptions;
         $this->_status = $status;
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -76,7 +86,7 @@ class Brand extends \Magento\Backend\Block\Widget\Form\Generic implements \Magen
         $form->setHtmlIdPrefix('brand_');
         $form->setFieldNameSuffix('brand');
 
-        $this->addGeneralTab($form, $item->getId());
+        $this->addMetaDataTab($form, $item->getId());
 
         $itemData = $this->_session->getData('tasks_brand_brand_data', true);
         if ($itemData) {
@@ -96,7 +106,7 @@ class Brand extends \Magento\Backend\Block\Widget\Form\Generic implements \Magen
      */
     public function getTabLabel()
     {
-        return __('Brand');
+        return __('Brand meta');
     }
 
     /**
@@ -129,16 +139,15 @@ class Brand extends \Magento\Backend\Block\Widget\Form\Generic implements \Magen
         return false;
     }
 
-    protected function addGeneralTab(&$form, $itemId)
+    protected function addMetaDataTab(&$form, $itemId)
     {
         $fieldset = $form->addFieldset(
-            'base_fieldset',
+            'meta_fieldset',
             [
-                'legend' => __('Item Information'),
+                'legend' => __('Brand meta data'),
                 'class' => 'fieldset-wide'
             ]
         );
-
         if ($itemId) {
             $fieldset->addField(
                 'entity_id',
@@ -146,50 +155,37 @@ class Brand extends \Magento\Backend\Block\Widget\Form\Generic implements \Magen
                 ['name' => 'entity_id']
             );
         }
-
         $fieldset->addField(
-            'name',
+            'meta_title',
             'text',
             [
-                'name' => 'name',
-                'label' => __('Name'),
-                'title' => __('Name'),
-                'required' => true,
+                'name' => 'meta_title',
+                'label' => __('Meta title'),
+                'title' => __('Meta title'),
+                'required' => false,
             ]
         );
 
         $fieldset->addField(
-            'url_pic',
+            'meta_keywords',
             'text',
             [
-                'name' => 'url_pic',
-                'label' => __('Url picture'),
-                'title' => __('Url picture'),
-                'config' => $this->_wysiwygConfig->getConfig()
+                'name' => 'meta_keywords',
+                'label' => __('Meta keywords'),
+                'title' => __('Meta keywords'),
+                'required' => false,
             ]
         );
 
         $fieldset->addField(
-            'description',
-            'editor',
+            'meta_description',
+            'text',
             [
-                'name' => 'description',
-                'label' => __('Item description'),
-                'title' => __('Item description'),
-                'config' => $this->_wysiwygConfig->getConfig()
-            ]
-        );
-
-        $fieldset->addField(
-            'status',
-            'select',
-            [
-                'name' => 'status',
-                'label' => __('Item Content'),
-                'title' => __('Item Content'),
-                'values' => $this->_status->toOptionArray(),
+                'name' => 'meta_description',
+                'label' => __('Meta description'),
+                'title' => __('Meta description'),
+                'required' => false,
             ]
         );
     }
-
 }

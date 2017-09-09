@@ -29,9 +29,15 @@
             <block class="Tasks\Brand\Block\Adminhtml\Brand\Edit\Tabs" name="tasks_brand_brand_tabs">
                 <block class="Tasks\Brand\Block\Adminhtml\Brand\Edit\Tab\Brand"
                        name="tasks_brand_brand_edit_tab_brand"/>
+                <block class="Tasks\Brand\Block\Adminhtml\Brand\Edit\Tab\BrandMeta"
+                       name="tasks_brand_brand_edit_tab_brand_meta"/>
                 <action method="addTab">
                     <argument name="name" xsi:type="string">brand</argument>
                     <argument name="block" xsi:type="string">tasks_brand_brand_edit_tab_brand</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">brand_meta</argument>
+                    <argument name="block" xsi:type="string">tasks_brand_brand_edit_tab_brand_meta</argument>
                 </action>
             </block>
         </referenceContainer>
