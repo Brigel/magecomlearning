@@ -63,7 +63,7 @@ class UpgradeData implements UpgradeDataInterface
 
     private function upgradeSchema($setup)
     {
-        /** @var \Magento\Eav\Setup\EavS $eavSetup */
+        /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
         $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
 
         /**
@@ -80,6 +80,40 @@ class UpgradeData implements UpgradeDataInterface
                 'default' => 1,
             ]
         );
+
+        $eavSetup->addAttribute(
+            \Tasks\Brand\Model\Brand::ENTITY,
+            'meta_title',
+            [
+                'type' => 'varchar',
+                'label' => 'Meta title',
+                'input' => 'text',
+                'default' => '',
+            ]
+        );
+
+        $eavSetup->addAttribute(
+            \Tasks\Brand\Model\Brand::ENTITY,
+            'meta_keywords',
+            [
+                'type' => 'varchar',
+                'label' => 'Meta keywords',
+                'input' => 'text',
+                'default' => '',
+            ]
+        );
+
+        $eavSetup->addAttribute(
+            \Tasks\Brand\Model\Brand::ENTITY,
+            'meta_description',
+            [
+                'type' => 'varchar',
+                'label' => 'Meta description',
+                'input' => 'text',
+                'default' => '',
+            ]
+        );
+
     }
 
 }
