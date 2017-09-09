@@ -11,44 +11,6 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 class BrandSetup extends EavSetup
 {
-    /**
-     * Category model factory
-     *
-     * @var BrandFactory
-     */
-    private $brandFactory;
-
-    /**
-     * Init
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param Context $context
-     * @param CacheInterface $cache
-     * @param CollectionFactory $attrGroupCollectionFactory
-     * @param BrandFactory $brandFactory
-     */
-    public function __construct(
-        ModuleDataSetupInterface $setup,
-        Context $context,
-        CacheInterface $cache,
-        CollectionFactory $attrGroupCollectionFactory,
-        BrandFactory $brandFactory
-    ) {
-        $this->brandFactory = $brandFactory;
-        parent::__construct($setup, $context, $cache, $attrGroupCollectionFactory);
-    }
-
-    /**
-     * Creates brand model
-     *
-     * @param array $data
-     * @return \Tasks\Brand\Model\Brand
-     * @codeCoverageIgnore
-     */
-    public function createCategory($data = [])
-    {
-        return $this->brandFactory->create($data);
-    }
 
     /**
      * Default entities and attributes
@@ -58,39 +20,45 @@ class BrandSetup extends EavSetup
      */
     public function getDefaultEntities()
     {
+        $brandEntity = \Tasks\Brand\Model\Brand::ENTITY;
         return [
-            'tasks_brand' => [
+            $brandEntity => [
                 'entity_model' => 'Tasks\Brand\Model\ResourceModel\Brand',
-                'attribute_model' => 'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
-                'table' => 'brand_entity',
-                'entity_attribute_collection' => 'Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection',
+//                'attribute_model' => 'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
+                'table' => $brandEntity.'_entity',
+//                'entity_attribute_collection' => 'Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection',
                 'attributes' => [
+                    'status' => [
+                        'type' => 'static',
+                        'label' => 'Status',
+                        'input' => 'select',
+                        'source' => 'Tasks\Brand\Model\Config\Status',
+                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
+                    ],
                     'name' => [
                         'type' => 'varchar',
                         'label' => 'Name',
                         'input' => 'text',
-                        'source' => 'Tasks\Brand\Model\Product\Attribute\Source\Brand',
                         'frontend_class' => 'validate-length maximum-length-255',
                         'sort_order' => 1,
+                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                    ],
+                    'url_pic' => [
+                        'type' => 'varchar',
+                        'label' => 'Brand Logo',
+                        'input' => 'text',
+                        'frontend' => 'Magecom\Landing\Model\Attribute\Frontend\Image',
+                        'required' => false,
+                        'sort_order' => 2,
                         'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
                     ],
                     'description' => [
                         'type' => 'text',
                         'label' => 'Description',
                         'input' => 'textarea',
-                        'required' => false,
-                        'sort_order' => 2,
+                        'sort_order' => 3,
                         'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
                         'wysiwyg_enabled' => true,
-                        'is_html_allowed_on_front' => true,
-                    ],
-                    'status' => [
-                        'type' => 'int',
-                        'label' => 'Status',
-                        'input' => 'text',
-                        'required' => true,
-                        'sort_order' => 10,
-                        'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
                     ],
                 ],
             ]

@@ -111,6 +111,17 @@ class Brand extends \Magento\Backend\Block\Widget\Form\Generic implements \Magen
         );
 
         $fieldset->addField(
+            'url_pic',
+            'text',
+            [
+                'name' => 'url_pic',
+                'label' => __('Url picture'),
+                'title' => __('Url picture'),
+                'config' => $this->_wysiwygConfig->getConfig()
+            ]
+        );
+
+        $fieldset->addField(
             'description',
             'editor',
             [
@@ -135,10 +146,6 @@ class Brand extends \Magento\Backend\Block\Widget\Form\Generic implements \Magen
         $itemData = $this->_session->getData('tasks_brand_brand_data', true);
         if ($itemData) {
             $item->addData($itemData);
-        } else {
-            if (!$item->getId()) {
-                $item->addData($item->getDefaultValues());
-            }
         }
         $form->addValues($item->getData());
         $this->setForm($form);

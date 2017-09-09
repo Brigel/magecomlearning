@@ -36,9 +36,12 @@ class InstallData implements InstallDataInterface
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
+        $setup->startSetup();
         /** @var \Magento\Catalog\Setup\BrandSetup $brandSetup */
         $brandSetup = $this->brandSetupFactory->create(['setup' => $setup]);
 
         $brandSetup->installEntities();
+
+        $setup->endSetup();
     }
 }

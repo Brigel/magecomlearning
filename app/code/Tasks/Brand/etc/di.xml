@@ -19,7 +19,7 @@
     </virtualType>
     <type name="Tasks\Brand\Model\ResourceModel\Brand\Grid\Collection">
         <arguments>
-            <argument name="mainTable" xsi:type="string">items</argument>
+            <argument name="mainTable" xsi:type="string">tasks_brand_entity</argument>
             <argument name="eventPrefix" xsi:type="string">tasks_brand_brand_grid_collection</argument>
             <argument name="eventObject" xsi:type="string">brand_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Tasks\Brand\Model\ResourceModel\Brand</argument>

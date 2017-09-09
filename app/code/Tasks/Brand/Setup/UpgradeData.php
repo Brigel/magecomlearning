@@ -35,22 +35,68 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
  * @package Tasks\TestEav\Setup
  */
 class UpgradeData implements UpgradeDataInterface {
-    protected $employeeFactory;
 
+    /**
+     * EAV setup factory
+     *
+     * @var EavSetupFactory
+     */
+    private $eavSetupFactory;
+
+    /**
+     * @var \Tasks\Brand\Model\BrandFactory
+     */
+    protected $brandFactory;
+
+    /**
+     * Brand setup factory
+     *
+     * @var BrandSetupFactory
+     */
+    private $brandSetupFactory;
+
+    /**
+     * UpgradeData constructor.
+     * @param \Magento\Eav\Setup\EavSetupFactory $eavSetupFactory
+     * @param \Tasks\Brand\Model\BrandFactory $brandFactory
+     * @param BrandSetupFactory $brandSetupFactory
+     */
     public function __construct(
-        \Tasks\Brand\Model\BrandFactory $brandFactory
+        \Magento\Eav\Setup\EavSetupFactory $eavSetupFactory,
+        \Tasks\Brand\Model\BrandFactory $brandFactory,
+        BrandSetupFactory $brandSetupFactory
     ) {
-        $this->employeeFactory = $brandFactory;
+        $this->eavSetupFactory = $eavSetupFactory;
+        $this->brandFactory = $brandFactory;
+        $this->brandSetupFactory = $brandSetupFactory;
     }
 
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context) {
         $setup->startSetup();
+        $brandEntity = \Tasks\Brand\Model\Brand::ENTITY;
 
-        $employee = $this->employeeFactory->create();
-        $employee->setName('qweqweew');
-        $employee->setStatus(2);
-        $employee->setDescriprion('ppppppppppppppppppppppppppppp');
-        $employee->save();
+        $brandSetup = $this->brandSetupFactory->create(['setup' => $setup]);
+
+        $brand = $this->brandFactory->create();
+
+        $brand->setName('yuyuuiyuiiy');
+        $brand->setStatus(2);
+        $brand->setDescription('nbnvnvbnvbnvbnvbnbvnvbnvnb');
+        $brand->save();
+
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
+        $eavSetup->addAttribute(
+            \Magento\Catalog\Model\Product::ENTITY,
+            'brand',
+            [
+                'type' => 'int',
+                'label' => 'Brand',
+                'input' => 'select',
+                'source' => 'Tasks\Brand\Model\Config\BrandSource',
+                'default' => 0,
+            ]
+        );
+
 
         $setup->endSetup();
     }
