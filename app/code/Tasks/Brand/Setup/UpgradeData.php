@@ -1,11 +1,5 @@
 <?php
 /**
- * Created by IntelliJ IDEA.
- * User: user
- * Date: 31.08.17
- * Time: 13:35
- */
-/**
  * Magecom
  *
  * NOTICE OF LICENSE
@@ -34,57 +28,47 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
  * Class UpgradeData
  * @package Tasks\TestEav\Setup
  */
-class UpgradeData implements UpgradeDataInterface {
+class UpgradeData implements UpgradeDataInterface
+{
 
     /**
      * EAV setup factory
      *
-     * @var EavSetupFactory
+     * @var  \Magento\Eav\Setup\EavSetupFactory
      */
     private $eavSetupFactory;
 
     /**
-     * @var \Tasks\Brand\Model\BrandFactory
-     */
-    protected $brandFactory;
-
-    /**
-     * Brand setup factory
-     *
-     * @var BrandSetupFactory
-     */
-    private $brandSetupFactory;
-
-    /**
      * UpgradeData constructor.
      * @param \Magento\Eav\Setup\EavSetupFactory $eavSetupFactory
-     * @param \Tasks\Brand\Model\BrandFactory $brandFactory
-     * @param BrandSetupFactory $brandSetupFactory
      */
     public function __construct(
-        \Magento\Eav\Setup\EavSetupFactory $eavSetupFactory,
-        \Tasks\Brand\Model\BrandFactory $brandFactory,
-        BrandSetupFactory $brandSetupFactory
-    ) {
+        \Magento\Eav\Setup\EavSetupFactory $eavSetupFactory
+    )
+    {
         $this->eavSetupFactory = $eavSetupFactory;
-        $this->brandFactory = $brandFactory;
-        $this->brandSetupFactory = $brandSetupFactory;
     }
 
-    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context) {
+    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    {
         $setup->startSetup();
-        $brandEntity = \Tasks\Brand\Model\Brand::ENTITY;
+        /**
+         * Upgrading schema before upgrade Data
+         */
+        $this->upgradeSchema($setup);
 
-        $brandSetup = $this->brandSetupFactory->create(['setup' => $setup]);
 
-        $brand = $this->brandFactory->create();
+        $setup->endSetup();
+    }
 
-        $brand->setName('yuyuuiyuiiy');
-        $brand->setStatus(2);
-        $brand->setDescription('nbnvnvbnvbnvbnvbnbvnvbnvnb');
-        $brand->save();
-
+    private function upgradeSchema($setup)
+    {
+        /** @var \Magento\Eav\Setup\EavS $eavSetup */
         $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
+
+        /**
+         * Add new attribute Brand to product
+         */
         $eavSetup->addAttribute(
             \Magento\Catalog\Model\Product::ENTITY,
             'brand',
@@ -93,11 +77,9 @@ class UpgradeData implements UpgradeDataInterface {
                 'label' => 'Brand',
                 'input' => 'select',
                 'source' => 'Tasks\Brand\Model\Config\BrandSource',
-                'default' => 0,
+                'default' => 1,
             ]
         );
-
-
-        $setup->endSetup();
     }
+
 }

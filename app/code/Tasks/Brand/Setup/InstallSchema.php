@@ -17,15 +17,22 @@ class InstallSchema implements InstallSchemaInterface
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-        $installer = $setup;
-
-        $installer->startSetup();
+        $setup->startSetup();
 
         $brandEntity = \Tasks\Brand\Model\Brand::ENTITY;
 
-        /**
-         * Create table 'brand_entity'
-         */
+        $this->installEntityTable($setup, $brandEntity)
+            ->installDateTimeTable($setup, $brandEntity)
+            ->installDecimalTable($setup, $brandEntity)
+            ->installIntTable($setup, $brandEntity)
+            ->installTextTable($setup, $brandEntity)
+            ->installVarcharTable($setup, $brandEntity);
+
+        $setup->endSetup();
+    }
+
+    protected function installEntityTable(&$setup, $brandEntity)
+    {
         $table = $setup->getConnection()
             ->newTable($setup->getTable($brandEntity . '_entity'))
             ->addColumn(
@@ -38,7 +45,7 @@ class InstallSchema implements InstallSchemaInterface
                 'status',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['nullable' => false,'default' => 1],
+                ['nullable' => false, 'default' => 1],
                 'Status'
             )
             ->addColumn(
@@ -56,13 +63,19 @@ class InstallSchema implements InstallSchemaInterface
                 'Update Time'
             )
             ->setComment('Tasks_Brand Brand Table');
+        /**
+         * Create table 'brand_entity'
+         */
+
         $setup->getConnection()->createTable($table);
 
-        /**
-         * Create table 'brand_entity_datetime'
-         */
-        $table = $installer->getConnection()
-            ->newTable($installer->getTable($brandEntity.'_entity_datetime'))
+        return $this;
+    }
+
+    protected function installDateTimeTable(&$setup, $brandEntity)
+    {
+        $table = $setup->getConnection()
+            ->newTable($setup->getTable($brandEntity . '_entity_datetime'))
             ->addColumn(
                 'value_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -99,8 +112,8 @@ class InstallSchema implements InstallSchemaInterface
                 'Value'
             )
             ->addIndex(
-                $installer->getIdxName(
-                    $brandEntity.'_entity_datetime',
+                $setup->getIdxName(
+                    $brandEntity . '_entity_datetime',
                     ['entity_id', 'attribute_id', 'store_id'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
@@ -108,56 +121,59 @@ class InstallSchema implements InstallSchemaInterface
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addIndex(
-                $installer->getIdxName($brandEntity.'_entity_datetime', ['attribute_id']),
+                $setup->getIdxName($brandEntity . '_entity_datetime', ['attribute_id']),
                 ['attribute_id']
             )
             ->addIndex(
-                $installer->getIdxName($brandEntity.'_entity_datetime', ['store_id']),
+                $setup->getIdxName($brandEntity . '_entity_datetime', ['store_id']),
                 ['store_id']
             )
             ->addForeignKey(
-                $installer->getFkName(
-                    $brandEntity.'_entity_datetime',
+                $setup->getFkName(
+                    $brandEntity . '_entity_datetime',
                     'attribute_id',
                     'eav_attribute',
                     'attribute_id'
                 ),
                 'attribute_id',
-                $installer->getTable('eav_attribute'),
+                $setup->getTable('eav_attribute'),
                 'attribute_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName(
-                    $brandEntity.'_entity_datetime',
+                $setup->getFkName(
+                    $brandEntity . '_entity_datetime',
                     'entity_id',
-                    $brandEntity.'_entity',
+                    $brandEntity . '_entity',
                     'entity_id'
                 ),
                 'entity_id',
-                $installer->getTable($brandEntity.'_entity'),
+                $setup->getTable($brandEntity . '_entity'),
                 'entity_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName(
-                    $brandEntity.'_entity_datetime',
+                $setup->getFkName(
+                    $brandEntity . '_entity_datetime',
                     'store_id',
                     'store',
                     'store_id'),
                 'store_id',
-                $installer->getTable('store'),
+                $setup->getTable('store'),
                 'store_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Brand Datetime Attribute Backend Table');
-        $installer->getConnection()->createTable($table);
 
-        /**
-         * Create table $brandEntity.'_entity_decimal'
-         */
-        $table = $installer->getConnection()
-            ->newTable($installer->getTable($brandEntity.'_entity_decimal'))
+        $setup->getConnection()->createTable($table);
+
+        return $this;
+    }
+
+    protected function installDecimalTable(&$setup, $brandEntity)
+    {
+        $table = $setup->getConnection()
+            ->newTable($setup->getTable($brandEntity . '_entity_decimal'))
             ->addColumn(
                 'value_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -194,8 +210,8 @@ class InstallSchema implements InstallSchemaInterface
                 'Value'
             )
             ->addIndex(
-                $installer->getIdxName(
-                    $brandEntity.'_entity_decimal',
+                $setup->getIdxName(
+                    $brandEntity . '_entity_decimal',
                     ['entity_id', 'attribute_id', 'store_id'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
@@ -203,52 +219,55 @@ class InstallSchema implements InstallSchemaInterface
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addIndex(
-                $installer->getIdxName($brandEntity.'_entity_decimal', ['store_id']),
+                $setup->getIdxName($brandEntity . '_entity_decimal', ['store_id']),
                 ['store_id']
             )
             ->addIndex(
-                $installer->getIdxName($brandEntity.'_entity_decimal', ['attribute_id']),
+                $setup->getIdxName($brandEntity . '_entity_decimal', ['attribute_id']),
                 ['attribute_id']
             )
             ->addForeignKey(
-                $installer->getFkName(
-                    $brandEntity.'_entity_decimal',
+                $setup->getFkName(
+                    $brandEntity . '_entity_decimal',
                     'attribute_id',
                     'eav_attribute',
                     'attribute_id'
                 ),
                 'attribute_id',
-                $installer->getTable('eav_attribute'),
+                $setup->getTable('eav_attribute'),
                 'attribute_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName(
-                    $brandEntity.'_entity_decimal',
+                $setup->getFkName(
+                    $brandEntity . '_entity_decimal',
                     'entity_id',
-                    $brandEntity.'_entity',
+                    $brandEntity . '_entity',
                     'entity_id'
                 ),
                 'entity_id',
-                $installer->getTable($brandEntity.'_entity'),
+                $setup->getTable($brandEntity . '_entity'),
                 'entity_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName($brandEntity.'_entity_decimal', 'store_id', 'store', 'store_id'),
+                $setup->getFkName($brandEntity . '_entity_decimal', 'store_id', 'store', 'store_id'),
                 'store_id',
-                $installer->getTable('store'),
+                $setup->getTable('store'),
                 'store_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Brand Decimal Attribute Backend Table');
-        $installer->getConnection()->createTable($table);
 
-        /**
-         * Create table $brandEntity.'_entity_int'
-         */
-        $table = $installer->getConnection()
-            ->newTable($installer->getTable($brandEntity.'_entity_int'))
+        $setup->getConnection()->createTable($table);
+
+        return $this;
+    }
+
+    protected function installIntTable(&$setup, $brandEntity)
+    {
+        $table = $setup->getConnection()
+            ->newTable($setup->getTable($brandEntity . '_entity_int'))
             ->addColumn(
                 'value_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -285,8 +304,8 @@ class InstallSchema implements InstallSchemaInterface
                 'Value'
             )
             ->addIndex(
-                $installer->getIdxName(
-                    $brandEntity.'_entity_int',
+                $setup->getIdxName(
+                    $brandEntity . '_entity_int',
                     ['entity_id', 'attribute_id', 'store_id'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
@@ -294,42 +313,44 @@ class InstallSchema implements InstallSchemaInterface
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addIndex(
-                $installer->getIdxName($brandEntity.'_entity_int', ['attribute_id']),
+                $setup->getIdxName($brandEntity . '_entity_int', ['attribute_id']),
                 ['attribute_id']
             )
             ->addIndex(
-                $installer->getIdxName($brandEntity.'_entity_int', ['store_id']),
+                $setup->getIdxName($brandEntity . '_entity_int', ['store_id']),
                 ['store_id']
             )
             ->addForeignKey(
-                $installer->getFkName($brandEntity.'_entity_int', 'attribute_id', 'eav_attribute', 'attribute_id'),
+                $setup->getFkName($brandEntity . '_entity_int', 'attribute_id', 'eav_attribute', 'attribute_id'),
                 'attribute_id',
-                $installer->getTable('eav_attribute'),
+                $setup->getTable('eav_attribute'),
                 'attribute_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName($brandEntity.'_entity_int', 'entity_id', $brandEntity.'_entity', 'entity_id'),
+                $setup->getFkName($brandEntity . '_entity_int', 'entity_id', $brandEntity . '_entity', 'entity_id'),
                 'entity_id',
-                $installer->getTable($brandEntity.'_entity'),
+                $setup->getTable($brandEntity . '_entity'),
                 'entity_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName($brandEntity.'_entity_int', 'store_id', 'store', 'store_id'),
+                $setup->getFkName($brandEntity . '_entity_int', 'store_id', 'store', 'store_id'),
                 'store_id',
-                $installer->getTable('store'),
+                $setup->getTable('store'),
                 'store_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Brand Integer Attribute Backend Table');
-        $installer->getConnection()->createTable($table);
 
-        /**
-         * Create table $brandEntity.'_entity_text'
-         */
-        $table = $installer->getConnection()
-            ->newTable($installer->getTable($brandEntity.'_entity_text'))
+        $setup->getConnection()->createTable($table);
+        return $this;
+    }
+
+    protected function installTextTable(&$setup, $brandEntity)
+    {
+        $table = $setup->getConnection()
+            ->newTable($setup->getTable($brandEntity . '_entity_text'))
             ->addColumn(
                 'value_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -366,8 +387,8 @@ class InstallSchema implements InstallSchemaInterface
                 'Value'
             )
             ->addIndex(
-                $installer->getIdxName(
-                    $brandEntity.'_entity_text',
+                $setup->getIdxName(
+                    $brandEntity . '_entity_text',
                     ['entity_id', 'attribute_id', 'store_id'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
@@ -375,52 +396,55 @@ class InstallSchema implements InstallSchemaInterface
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addIndex(
-                $installer->getIdxName($brandEntity.'_entity_text', ['attribute_id']),
+                $setup->getIdxName($brandEntity . '_entity_text', ['attribute_id']),
                 ['attribute_id']
             )
             ->addIndex(
-                $installer->getIdxName($brandEntity.'_entity_text', ['store_id']),
+                $setup->getIdxName($brandEntity . '_entity_text', ['store_id']),
                 ['store_id']
             )
             ->addForeignKey(
-                $installer->getFkName(
-                    $brandEntity.'_entity_text',
+                $setup->getFkName(
+                    $brandEntity . '_entity_text',
                     'attribute_id',
                     'eav_attribute',
                     'attribute_id'
                 ),
                 'attribute_id',
-                $installer->getTable('eav_attribute'),
+                $setup->getTable('eav_attribute'),
                 'attribute_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName(
-                    $brandEntity.'_entity_text',
+                $setup->getFkName(
+                    $brandEntity . '_entity_text',
                     'entity_id',
-                    $brandEntity.'_entity',
+                    $brandEntity . '_entity',
                     'entity_id'
                 ),
                 'entity_id',
-                $installer->getTable($brandEntity.'_entity'),
+                $setup->getTable($brandEntity . '_entity'),
                 'entity_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName($brandEntity.'_entity_text', 'store_id', 'store', 'store_id'),
+                $setup->getFkName($brandEntity . '_entity_text', 'store_id', 'store', 'store_id'),
                 'store_id',
-                $installer->getTable('store'),
+                $setup->getTable('store'),
                 'store_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Brand Text Attribute Backend Table');
-        $installer->getConnection()->createTable($table);
 
-        /**
-         * Create table $brandEntity.'_entity_varchar'
-         */
-        $table = $installer->getConnection()
-            ->newTable($installer->getTable($brandEntity.'_entity_varchar'))
+        $setup->getConnection()->createTable($table);
+
+        return $this;
+    }
+
+    protected function installVarcharTable(&$setup, $brandEntity)
+    {
+        $table = $setup->getConnection()
+            ->newTable($setup->getTable($brandEntity . '_entity_varchar'))
             ->addColumn(
                 'value_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -457,8 +481,8 @@ class InstallSchema implements InstallSchemaInterface
                 'Value'
             )
             ->addIndex(
-                $installer->getIdxName(
-                    $brandEntity.'_entity_varchar',
+                $setup->getIdxName(
+                    $brandEntity . '_entity_varchar',
                     ['entity_id', 'attribute_id', 'store_id'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
@@ -466,47 +490,48 @@ class InstallSchema implements InstallSchemaInterface
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addIndex(
-                $installer->getIdxName($brandEntity.'_entity_varchar', ['attribute_id']),
+                $setup->getIdxName($brandEntity . '_entity_varchar', ['attribute_id']),
                 ['attribute_id']
             )
             ->addIndex(
-                $installer->getIdxName($brandEntity.'_entity_varchar', ['store_id']),
+                $setup->getIdxName($brandEntity . '_entity_varchar', ['store_id']),
                 ['store_id']
             )
             ->addForeignKey(
-                $installer->getFkName(
-                    $brandEntity.'_entity_varchar',
+                $setup->getFkName(
+                    $brandEntity . '_entity_varchar',
                     'attribute_id',
                     'eav_attribute',
                     'attribute_id'
                 ),
                 'attribute_id',
-                $installer->getTable('eav_attribute'),
+                $setup->getTable('eav_attribute'),
                 'attribute_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName(
-                    $brandEntity.'_entity_varchar',
+                $setup->getFkName(
+                    $brandEntity . '_entity_varchar',
                     'entity_id',
-                    $brandEntity.'_entity',
+                    $brandEntity . '_entity',
                     'entity_id'
                 ),
                 'entity_id',
-                $installer->getTable($brandEntity.'_entity'),
+                $setup->getTable($brandEntity . '_entity'),
                 'entity_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName($brandEntity.'_entity_varchar', 'store_id', 'store', 'store_id'),
+                $setup->getFkName($brandEntity . '_entity_varchar', 'store_id', 'store', 'store_id'),
                 'store_id',
-                $installer->getTable('store'),
+                $setup->getTable('store'),
                 'store_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Brand Varchar Attribute Backend Table');
-        $installer->getConnection()->createTable($table);
 
-        $installer->endSetup();
+        $setup->getConnection()->createTable($table);
+
+        return $this;
     }
 }
