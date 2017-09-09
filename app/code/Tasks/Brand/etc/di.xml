@@ -32,4 +32,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Theme\Block\Html\Topmenu">
+        <plugin name="block-topmenu" type="Tasks\Brand\Plugin\Block\Topmenu" />
+    </type>
 </config>
