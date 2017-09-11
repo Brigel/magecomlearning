@@ -61,6 +61,9 @@ class UpgradeData implements UpgradeDataInterface
         $setup->endSetup();
     }
 
+    /**
+     * @param $setup
+     */
     private function upgradeSchema($setup)
     {
         /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
@@ -100,6 +103,19 @@ class UpgradeData implements UpgradeDataInterface
                 'label' => 'Meta keywords',
                 'input' => 'text',
                 'default' => '',
+            ]
+        );
+
+        $eavSetup->addAttribute(
+            \Tasks\Brand\Model\Brand::ENTITY,
+            'url_key',
+            [
+                'type' => 'varchar',
+                'label' => 'Url key for url rewriter',
+                'input' => 'text',
+                'default' => '',
+                'required' => true,
+                'unique' => true,
             ]
         );
 

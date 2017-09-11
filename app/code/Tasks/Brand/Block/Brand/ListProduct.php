@@ -19,6 +19,7 @@
  */
 
 namespace Tasks\Brand\Block\Brand;
+
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 
 /**
@@ -32,6 +33,16 @@ class ListProduct extends \Magento\Catalog\Block\Product\ListProduct
      */
     protected $_productCollection;
 
+    /**
+     * ListProduct constructor.
+     * @param \Magento\Catalog\Block\Product\Context $context
+     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
+     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param \Magento\Framework\Url\Helper\Data $urlHelper
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
+     * @param array $data
+     */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context, \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
@@ -44,9 +55,12 @@ class ListProduct extends \Magento\Catalog\Block\Product\ListProduct
         parent::__construct($context, $postDataHelper, $layerResolver, $categoryRepository, $urlHelper, $data);
     }
 
+    /**
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection|\Magento\Framework\View\Result\PageFactory
+     */
     protected function _getProductCollection()
     {
-        if($this->_productCollection->isLoaded()){
+        if ($this->_productCollection->isLoaded()) {
             return $this->_productCollection;
         }
         $brand = $this->_request->getParam('brand');

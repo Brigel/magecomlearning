@@ -30,8 +30,18 @@ class ListBrand extends \Magento\Framework\View\Element\Template
      * @var \Tasks\Brand\Model\ResourceModel\Brand\CollectionFactory
      */
     protected $_brandCollection;
+
+    /**
+     * @var
+     */
     protected $_brands;
 
+    /**
+     * ListBrand constructor.
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Tasks\Brand\Model\ResourceModel\Brand\Collection $_brandCollection
+     * @param array $data
+     */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Tasks\Brand\Model\ResourceModel\Brand\Collection $_brandCollection,
@@ -43,10 +53,9 @@ class ListBrand extends \Magento\Framework\View\Element\Template
     }
 
 
-
     public function getBrands()
     {
-        if(!$this->_brands){
+        if (!$this->_brands) {
             $this->_brands = $this->_brandCollection->getItems();
         }
         return $this->_brands;

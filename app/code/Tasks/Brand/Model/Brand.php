@@ -35,5 +35,37 @@ class Brand extends AbstractModel
         $this->_init('Tasks\Brand\Model\ResourceModel\Brand');
     }
 
+    /**
+     * @return string
+     */
+    public function getUrlPath()
+    {
+        $urlKey = $this->getUrlKey();
+        return 'brand/' . $urlKey . '.html';
+    }
+
+    /**
+     * @param $urlKey
+     * @return mixed
+     */
+    public function getBrandIdByUrlKey($urlKey)
+    {
+        $brands = $this->getCollection();
+        $id =
+            $brands
+                ->addFieldToSelect('id')
+                ->addFieldToFilter('url_key', ['eq' => $urlKey])
+                ->getFirstItem()
+                ->getId();
+        return $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return '/' . 'brand' . '/' . $this->getUrlKey() . '.html';
+    }
 
 }

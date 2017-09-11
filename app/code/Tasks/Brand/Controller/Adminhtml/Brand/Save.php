@@ -69,7 +69,7 @@ class Save extends \Tasks\Brand\Controller\Adminhtml\Brand
             $this->_eventManager->dispatch(
                 'tasks_brand_brand_prepare_save',
                 [
-                    'item' => $brand,
+                    'brand' => $brand,
                     'request' => $this->getRequest()
                 ]
             );
@@ -87,6 +87,13 @@ class Save extends \Tasks\Brand\Controller\Adminhtml\Brand
                     );
                     return $resultRedirect;
                 }
+                $this->_eventManager->dispatch(
+                    'tasks_brand_after_save',
+                    [
+                        'brand' => $brand,
+                        'request' => $this->getRequest()
+                    ]
+                );
                 $resultRedirect->setPath('brand/*/');
                 return $resultRedirect;
             } catch (\Magento\Framework\Exception\LocalizedException $e) {

@@ -129,6 +129,10 @@ class Brand extends \Magento\Backend\Block\Widget\Form\Generic implements \Magen
         return false;
     }
 
+    /**
+     * @param $form
+     * @param $itemId
+     */
     protected function addGeneralTab(&$form, $itemId)
     {
         $fieldset = $form->addFieldset(
@@ -155,6 +159,18 @@ class Brand extends \Magento\Backend\Block\Widget\Form\Generic implements \Magen
                 'label' => __('Name'),
                 'title' => __('Name'),
                 'required' => true,
+            ]
+        );
+
+        $fieldset->addField(
+            'url_key',
+            'text',
+            [
+                'name' => 'url_key',
+                'label' => __('Unique URL key'),
+                'title' => __('Unique URL key'),
+                'required' => true,
+                'unique' => true
             ]
         );
 

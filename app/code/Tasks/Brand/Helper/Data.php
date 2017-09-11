@@ -47,7 +47,12 @@ class Data extends AbstractHelper
      */
     const XML_PATH_TO_CONFIG = 'brands/general/';
 
-
+    /**
+     * Data constructor.
+     * @param Context $context
+     * @param ObjectManagerInterface $objectManager
+     * @param StoreManagerInterface $storeManager
+     */
     public function __construct(
         Context $context,
         ObjectManagerInterface $objectManager,

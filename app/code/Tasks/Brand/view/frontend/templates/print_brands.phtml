@@ -28,7 +28,7 @@ foreach ($brands as $brand) {
 
 
 ?>
-<a href="/brand/products/index/?brand=<?= $brand->getId() ?>"> <?= $brand->getName() ?> </a><br>
+<a href="<?= $brand->getUrl() ?>"> <?= $brand->getName() ?> </a><br>
 
 <?php
 }

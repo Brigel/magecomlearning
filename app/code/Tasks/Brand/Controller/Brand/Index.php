@@ -34,12 +34,10 @@ class Index extends \Magento\Framework\App\Action\Action
     protected $_resultPageFactory;
 
 
-
     /**
      * Index constructor.
      * @param Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Tasks\Brand\Model\ResourceModel\Brand\CollectionFactory $_brandFactory
      */
     public function __construct(
         Context $context,

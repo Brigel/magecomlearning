@@ -139,6 +139,10 @@ class BrandMeta extends \Magento\Backend\Block\Widget\Form\Generic implements \M
         return false;
     }
 
+    /**
+     * @param $form
+     * @param $itemId
+     */
     protected function addMetaDataTab(&$form, $itemId)
     {
         $fieldset = $form->addFieldset(

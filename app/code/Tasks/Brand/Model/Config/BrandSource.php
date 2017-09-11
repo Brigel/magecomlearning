@@ -28,8 +28,15 @@ use Magento\Framework\Data\OptionSourceInterface;
  */
 class BrandSource extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
+    /**
+     * @var \Tasks\Brand\Model\ResourceModel\Brand\Collection
+     */
     protected $brandCollection;
 
+    /**
+     * BrandSource constructor.
+     * @param \Tasks\Brand\Model\ResourceModel\Brand\CollectionFactory $collectionFactory
+     */
     public function __construct(
         \Tasks\Brand\Model\ResourceModel\Brand\CollectionFactory $collectionFactory
     )

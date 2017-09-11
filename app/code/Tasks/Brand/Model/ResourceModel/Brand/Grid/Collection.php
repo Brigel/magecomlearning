@@ -27,10 +27,17 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\Document;
 use Tasks\Brand\Model\ResourceModel\Brand;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
+/**
+ * Class Collection
+ * @package Tasks\Brand\Model\ResourceModel\Brand\Grid
+ */
 class Collection extends BrandCollection implements SearchResultInterface
 {
     protected $aggregations;
 
+    /**
+     * @return \Magento\Framework\DataObject[]
+     */
     public function getItems()
     {
         $this->addAttributeToSelect('*');
@@ -42,41 +49,71 @@ class Collection extends BrandCollection implements SearchResultInterface
         $this->_init(Document::class, Brand::class);
     }
 
+    /**
+     * @return mixed
+     */
     public function getAggregations()
     {
         return $this->aggregations;
     }
 
+    /**
+     * @param \Magento\Framework\Api\Search\AggregationInterface $aggregations
+     * @return void
+     */
     public function setAggregations($aggregations)
     {
         $this->aggregations = $aggregations;
     }
 
+    /**
+     * @param null $limit
+     * @param null $offset
+     * @return array
+     */
     public function getAllIds($limit = null, $offset = null)
     {
         return $this->getConnection()->fetchCol($this->_getAllIdsSelect($limit, $offset), $this->_bindParams);
     }
 
+    /**
+     * @return null
+     */
     public function getSearchCriteria()
     {
         return null;
     }
 
+    /**
+     * @param SearchCriteriaInterface|null $searchCriteria
+     * @return $this
+     */
     public function setSearchCriteria(SearchCriteriaInterface $searchCriteria = null)
     {
         return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getTotalCount()
     {
         return $this->getSize();
     }
 
+    /**
+     * @param int $totalCount
+     * @return $this
+     */
     public function setTotalCount($totalCount)
     {
         return $this;
     }
 
+    /**
+     * @param array|null $items
+     * @return $this
+     */
     public function setItems(array $items = null)
     {
         return $this;
