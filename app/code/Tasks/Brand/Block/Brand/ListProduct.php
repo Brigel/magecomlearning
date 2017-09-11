@@ -20,59 +20,75 @@
 
 namespace Tasks\Brand\Block\Brand;
 
-use Magento\Catalog\Api\CategoryRepositoryInterface;
+//use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Framework\View\Element\Template;
 
 /**
  * Class Grid
  * @package Tasks\Brand\Block\Adminhtml\Brand
  */
-class ListProduct extends \Magento\Catalog\Block\Product\ListProduct
+class ListProduct extends Template
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
     protected $_productCollection;
 
-    /**
-     * ListProduct constructor.
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
-     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
-     * @param CategoryRepositoryInterface $categoryRepository
-     * @param \Magento\Framework\Url\Helper\Data $urlHelper
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
-     * @param array $data
-     */
+    protected $_brandConfig;
+
+    protected $_coreRegistry;
+
+    protected $_pageConfig;
+
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context, \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
-        \Magento\Catalog\Model\Layer\Resolver $layerResolver,
-        CategoryRepositoryInterface $categoryRepository,
-        \Magento\Framework\Url\Helper\Data $urlHelper,
+        Template\Context $context,
         \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection,
-        array $data = []
-    ) {
+        \Tasks\Brand\Helper\Data $brandConfig,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\View\Page\Config $pageConfig,
+        array $data = [])
+    {
+        $this->_pageConfig = $pageConfig;
+        $this->_brandConfig = $brandConfig;
         $this->_productCollection = $productCollection;
-        parent::__construct($context, $postDataHelper, $layerResolver, $categoryRepository, $urlHelper, $data);
+        $this->_coreRegistry = $registry;
+        parent::__construct($context, $data);
+        $this->initial();
+    }
+
+    private function initial()
+    {
+        $brand = $this->_coreRegistry->registry('current_brand');
+
+        $meta_title = $brand->getData('meta_title')? $brand->getData('meta_title')
+            :$this->_brandConfig->getGeneralConfig('meta_title');
+
+        $meta_description = $brand->getData('meta_description')? $brand->getData('meta_description')
+            :$this->_brandConfig->getGeneralConfig('meta_description');
+
+        $meta_keywords = $brand->getData('meta_keywords')? $brand->getData('meta_keywords')
+            :$this->_brandConfig->getGeneralConfig('meta_keywords');
+
+        $this->_pageConfig->getTitle()->set($meta_title);
+
+        $this->_pageConfig->setKeywords($meta_description);
+
+        $this->_pageConfig->setDescription($meta_keywords);
+
+        $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
+        if ($pageMainTitle) {
+            $pageMainTitle->setPageTitle($brand->getName());
+        }
     }
 
     /**
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection|\Magento\Framework\View\Result\PageFactory
+     * @return \Magento\Catalog\Model\Product[]
      */
-    protected function _getProductCollection()
+    public function getProductsByCurrentBrand()
     {
-        if ($this->_productCollection->isLoaded()) {
-            return $this->_productCollection;
-        }
-        $brand = $this->_request->getParam('brand');
-        $this->_productCollection->addAttributeToSelect('*')
-            ->addAttributeToFilter(
-                [
-                    ['attribute' => 'brand', 'eq' => $brand]
-                ]
-            );
-        $this->_productCollection->load();
-        return $this->_productCollection;
+        $brand = $this->_coreRegistry->registry('current_brand');
+        $this->_productCollection->addFieldToSelect('brand',['eq'=>$brand->getId()]);
+        return $this->_productCollection->getItems();
     }
-
 
 }

@@ -30,8 +30,8 @@ class Brand extends AbstractModel
 {
     const ENTITY = 'tasks_brand';
 
-    protected function _construct()
-    {
+    protected function _construct(
+    ) {
         $this->_init('Tasks\Brand\Model\ResourceModel\Brand');
     }
 
@@ -50,14 +50,12 @@ class Brand extends AbstractModel
      */
     public function getBrandIdByUrlKey($urlKey)
     {
-        $brands = $this->getCollection();
-        $id =
-            $brands
-                ->addFieldToSelect('id')
+        $brand =
+            $this->getCollection()
+                ->addFieldToSelect('entity_id')
                 ->addFieldToFilter('url_key', ['eq' => $urlKey])
-                ->getFirstItem()
-                ->getId();
-        return $id;
+                ->getFirstItem();
+        return $brand->getId();
     }
 
     /**

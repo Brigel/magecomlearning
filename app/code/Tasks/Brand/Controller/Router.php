@@ -66,7 +66,7 @@ class Router implements \Magento\Framework\App\RouterInterface
      */
     public function match(\Magento\Framework\App\RequestInterface $request)
     {
-        if ($request->getModuleName() === 'Brand') {
+        if ($request->getModuleName() === 'brand') {
             return;
         }
         $mainPath =   addcslashes( $request->getDistroBaseUrl(), '/');
@@ -76,16 +76,19 @@ class Router implements \Magento\Framework\App\RouterInterface
 
         if(preg_match($pattern, $allPath)===1){
             $urlKey = trim($request->getPathInfo(), '/brand/');
-            $urlKey = rtrim($urlKey, '/');
+            $urlKey = rtrim($urlKey, '.html');
 
+            if(!empty($urlKey))
             $brandId = $this->brands->getBrandIdByUrlKey($urlKey);
 
             $request->setModuleName('brand')
-                ->setControllerName('products')
-                ->setActionName('index')
+                ->setControllerName('brand')
+                ->setActionName('view')
                 ->setParam('brand', $brandId);
 
             $request->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $urlKey);
+        }else{
+            return ;
         }
 
         return $this->actionFactory->create('Magento\Framework\App\Action\Forward');

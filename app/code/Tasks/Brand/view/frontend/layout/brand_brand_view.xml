@@ -1,4 +1,5 @@
-<?php
+<?xml version="1.0"?>
+<!--
 /**
  * Magecom
  *
@@ -12,28 +13,17 @@
  * obtain it through the world-wide-web, please send an email
  * to info@magecom.net so we can send you a copy immediately.
  *
- * @category    Design
- * @package     Magecom_Package
+ * @category Magecom
+ * @package Magecom_Module
  * @copyright Copyright (c) 2017 Magecom, Inc. (http://www.magecom.net)
  * @license  http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-/**
- * @var \Tasks\Brand\Block\Brand\ListProduct $block
- */
-$products = $block->getProductsByCurrentBrand();
-?>
-<ul>
-<?php
-/**
- * @var \Magento\Catalog\Model\Product $product
- */
-foreach ($products as $product) {
-?>
-<li><a href="/catalog/product/view/id/<?=$product->getId() ?>">
-        <?= $product->getName().$product->getData('sku') ?>
-    </a></li>
-<?php
-}
-?>
-
-</ul>
+ */-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd"
+      layout="1column">
+    <body>
+        <referenceContainer name="content">
+            <block class="Tasks\Brand\Block\Brand\ListProduct" name="list" template="list.phtml"/>
+        </referenceContainer>
+    </body>
+</page>
