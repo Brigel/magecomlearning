@@ -1,0 +1,3 @@
+[submodule "app/code/Tasks/Brand"]
+	path = app/code/Tasks/Brand
+	url = https://github.com/Brigel/tasks_brand.git
